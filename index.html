@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Calculadora NEXA para estimar o valor de projetos de sites de forma rápida e organizada."
+    >
+
+    <title>NEXA Calculadora de Preço</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+</head>
+
+<body>
+
+    <!-- =========================================
+         HEADER
+    ========================================== -->
+
+    <header class="header">
+
+        <div class="container header-container">
+
+            <div class="brand">
+
+                <div class="brand-logo">
+                    <img
+                        src="nexa-logo.png"
+                        alt="NEXA"
+                    >
+                </div>
+
+                <div class="brand-info">
+
+                    <h1>
+                        NEXA Calculadora de Preço
+                    </h1>
+
+                    <p>
+                        Estime o valor de um projeto de site de forma rápida e organizada.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================================
+         CONTEÚDO PRINCIPAL
+    ========================================== -->
+
+    <main class="main">
+
+        <div class="container">
+
+            <section class="calculator">
+
+                <form id="calculator-form">
+
+
+                    <!-- =========================================
+                         01 - TIPO DE PROJETO
+                    ========================================== -->
+
+                    <section class="form-section">
+
+                        <div class="section-heading">
+
+                            <span class="section-number">
+                                01
+                            </span>
+
+                            <div class="section-heading-content">
+
+                                <h2>
+                                    Tipo de projeto
+                                </h2>
+
+                                <p>
+                                    Escolha o tipo de site que será desenvolvido.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="options-grid">
+
+                            <label class="option-card">
+
+                                <input
+                                    type="radio"
+                                    name="project-type"
+                                    value="landingPage"
+                                    required
+                                >
+
+                                <span class="option-content">
+
+                                    <strong>
+                                        Landing Page
+                                    </strong>
+
+                                    <small>
+                                        Página focada em uma oferta ou objetivo específico.
+                                    </small>
+
+                                </span>
+
+                            </label>
+
+
+                            <label class="option-card">
+
+                                <input
+                                    type="radio"
+                                    name="project-type"
+                                    value="institucional"
+                                >
+
+                                <span class="option-content">
+
+                                    <strong>
+                                        Site Institucional
+                                    </strong>
+
+                                    <small>
+                                        Site profissional para empresas e negócios.
+                                    </small>
+
+                                </span>
+
+                            </label>
+
+
+                            <label class="option-card">
+
+                                <input
+                                    type="radio"
+                                    name="project-type"
+                                    value="lojaVirtual"
+                                >
+
+                                <span class="option-content">
+
+                                    <strong>
+                                        Loja Virtual
+                                    </strong>
+
+                                    <small>
+                                        Estrutura para apresentação e venda de produtos.
+                                    </small>
+
+                                </span>
+
+                            </label>
+
+
+                            <label class="option-card">
+
+                                <input
+                                    type="radio"
+                                    name="project-type"
+                                    value="personalizado"
+                                >
+
+                                <span class="option-content">
+
+                                    <strong>
+                                        Site Personalizado
+                                    </strong>
+
+                                    <small>
+                                        Projeto desenvolvido de acordo com necessidades específicas.
+                                    </small>
+
+                                </span>
+
+                            </label>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- =========================================
+                         02 - PÁGINAS
+                    ========================================== -->
+
+                    <section class="form-section">
+
+                        <div class="section-heading">
+
+                            <span class="section-number">
+                                02
+                            </span>
+
+                            <div class="section-heading-content">
+
+                                <h2>
+                                    Número de páginas
+                                </h2>
+
+                                <p>
+                                    Quantas páginas o projeto terá?
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="options-grid">
+
+                            <label class="option-card">
+
+                                <input
+                                    type="radio"
+                                    name="pages"
+                                    value="uma"
+                                    required
+                                >
+
+                                <span class="option-content">
+
+                                    <strong>
+                                        1 página
+                                    </strong>
+
+                                    <small>
+                                        Uma única página para apresentar o negócio ou oferta.
+                                    </small>
+
+                                </span>
+
+                            </label>
+
+
+                            <label class="option-card">
+
+                                <input
+                                    type="radio"
+                                    name="pages"
+                                    value="duasQuatro"
+                                >
+
+                                <span class="option-content">
+
+                                    <strong>
+                                        2 a 4 páginas
+                                    </strong>
+
+                                    <small>
+                                        Estrutura pequena com algumas páginas internas.
+                                    </small>
+
+                                </span>
+
+                            </label>
+
+
+                            <label class="option-card">
+
+                                <input
+                                    type="radio"
+                                    name="pages"
+                                    value="cincoSete"
+                                >
+
+                                <span class="option-content">
+
+                                    <strong>
+                                        5 a 7 páginas
+                                    </strong>
+
+                                    <small>
+                                        Estrutura intermediária para projetos mais completos.
+                                    </small>
+
+                                </span>
+
+                            </label>
+
+
+                            <label class="option-card">
+
+                                <input
+                                    type="radio"
+                                    name="pages"
+                                    value="oitoMais"
+                                >
+
+                                <span class="option-content">
+
+                                    <strong>
+                                        8 ou mais páginas
+                                    </strong>
+
+                                    <small>
+                                        Estrutura maior com diversas páginas e conteúdos.
+                                    </small>
+
+                                </span>
+
+                            </label>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- =========================================
+                         03 - FUNCIONALIDADES
+                    ========================================== -->
+
+                    <section class="form-section">
+
+                        <div class="section-heading">
+
+                            <span class="section-number">
+                                03
+                            </span>
+
+                            <div class="section-heading-content">
+
+                                <h2>
+                                    Funcionalidades extras
+                                </h2>
+
+                                <p>
+                                    Selecione os recursos adicionais necessários para o projeto.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="checkbox-grid">
+
+                            <label class="checkbox-option">
+
+                                <input
+                                    type="checkbox"
+                                    name="features"
+                                    value="formulario"
+                                >
+
+                                <span>
+                                    Formulário de contato
+                                </span>
+
+                            </label>
+
+
+                            <label class="checkbox-option">
+
+                                <input
+                                    type="checkbox"
+                                    name="features"
+                                    value="whatsapp"
+                                >
+
+                                <span>
+                                    Integração com WhatsApp
+                                </span>
+
+                            </label>
+
+
+                            <label class="checkbox-option">
+
+                                <input
+                                    type="checkbox"
+                                    name="features"
+                                    value="galeria"
+                                >
+
+                                <span>
+                                    Galeria de imagens
+                                </span>
+
+                            </label>
+
+
+                            <label class="checkbox-option">
+
+                                <input
+                                    type="checkbox"
+                                    name="features"
+                                    value="blog"
+                                >
+
+                                <span>
+                                    Blog
+                                </span>
+
+                            </label>
+
+
+                            <label class="checkbox-option">
+
+                                <input
+                                    type="checkbox"
+                                    name="features"
+                                    value="depoimentos"
+                                >
+
+                                <span>
+                                    Área de depoimentos
+                                </span>
+
+                            </label>
+
+
+                            <label class="checkbox-option">
+
+                                <input
+                                    type="checkbox"
+                                    name="features"
+                                    value="mapa"
+                                >
+
+                                <span>
+                                    Mapa / localização
+                                </span>
+
+                            </label>
+
+
+                            <label class="checkbox-option">
+
+                                <input
+                                    type="checkbox"
+                                    name="features"
+                                    value="animacoes"
+                                >
+
+                                <span>
+                                    Animações
+                                </span>
+
+                            </label>
+
+
+                            <label class="checkbox-option">
+
+                                <input
+                                    type="checkbox"
+                                    name="features"
+                                    value="seo"
+                                >
+
+                                <span>
+                                    SEO básico
+                                </span>
+
+                            </label>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- =========================================
+                         04 - DESIGN
+                    ========================================== -->
+
+                    <section class="form-section">
+
+                        <div class="section-heading">
+
+                            <span class="section-number">
+                                04
+                            </span>
+
+                            <div class="section-heading-content">
+
+                                <h2>
+                                    Design
+                                </h2>
+
+                                <p>
+                                    Escolha o nível de personalização visual do projeto.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="options-grid">
+
+                            <label class="option-card">
+
+                                <input
+                                    type="radio"
+                                    name="design"
+                                    value="simples"
+                                    required
+                                >
+
+                                <span class="option-content">
+
+                                    <strong>
+                                        Design simples
+                                    </strong>
+
+                                    <small>
+                                        Estrutura visual limpa e objetiva.
+                                    </small>
+
+                                </span>
+
+                            </label>
+
+
+                            <label class="option-card">
+
+                                <input
+                                    type="radio"
+                                    name="design"
+                                    value="personalizado"
+                                >
+
+                                <span class="option-content">
+
+                                    <strong>
+                                        Design personalizado
+                                    </strong>
+
+                                    <small>
+                                        Visual desenvolvido especificamente para o projeto.
+                                    </small>
+
+                                </span>
+
+                            </label>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- =========================================
+                         05 - PRAZO
+                    ========================================== -->
+
+                    <section class="form-section">
+
+                        <div class="section-heading">
+
+                            <span class="section-number">
+                                05
+                            </span>
+
+                            <div class="section-heading-content">
+
+                                <h2>
+                                    Prazo de entrega
+                                </h2>
+
+                                <p>
+                                    Escolha o prazo desejado para desenvolvimento.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="options-grid">
+
+                            <label class="option-card">
+
+                                <input
+                                    type="radio"
+                                    name="deadline"
+                                    value="normal"
+                                    required
+                                >
+
+                                <span class="option-content">
+
+                                    <strong>
+                                        Prazo normal
+                                    </strong>
+
+                                    <small>
+                                        Desenvolvimento dentro do prazo padrão.
+                                    </small>
+
+                                </span>
+
+                            </label>
+
+
+                            <label class="option-card">
+
+                                <input
+                                    type="radio"
+                                    name="deadline"
+                                    value="reduzido"
+                                >
+
+                                <span class="option-content">
+
+                                    <strong>
+                                        Prazo reduzido
+                                    </strong>
+
+                                    <small>
+                                        Entrega mais rápida com adicional no projeto.
+                                    </small>
+
+                                </span>
+
+                            </label>
+
+
+                            <label class="option-card">
+
+                                <input
+                                    type="radio"
+                                    name="deadline"
+                                    value="urgente"
+                                >
+
+                                <span class="option-content">
+
+                                    <strong>
+                                        Urgente
+                                    </strong>
+
+                                    <small>
+                                        Desenvolvimento acelerado para entrega prioritária.
+                                    </small>
+
+                                </span>
+
+                            </label>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- =========================================
+                         06 - MANUTENÇÃO
+                    ========================================== -->
+
+                    <section class="form-section">
+
+                        <div class="section-heading">
+
+                            <span class="section-number">
+                                06
+                            </span>
+
+                            <div class="section-heading-content">
+
+                                <h2>
+                                    Manutenção
+                                </h2>
+
+                                <p>
+                                    Deseja incluir um plano de manutenção mensal?
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <label class="maintenance-option">
+
+                            <input
+                                type="checkbox"
+                                id="maintenance"
+                                name="maintenance"
+                            >
+
+                            <span>
+
+                                <strong>
+                                    Incluir manutenção mensal
+                                </strong>
+
+                                <small>
+                                    Adiciona o valor mensal de manutenção ao orçamento.
+                                </small>
+
+                            </span>
+
+                        </label>
+
+
+                        <div
+                            id="maintenance-preview"
+                            class="maintenance-preview"
+                            hidden
+                        >
+
+                            <span>
+                                Valor sugerido
+                            </span>
+
+                            <strong id="maintenance-value">
+                                R$ 0,00/mês
+                            </strong>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- =========================================
+                         ERRO
+                    ========================================== -->
+
+                    <div
+                        id="form-error"
+                        class="form-error"
+                        role="alert"
+                        aria-live="polite"
+                    ></div>
+
+
+                    <!-- =========================================
+                         BOTÃO CALCULAR
+                    ========================================== -->
+
+                    <div class="form-actions">
+
+                        <button
+                            type="submit"
+                            class="primary-button"
+                        >
+                            Calcular estimativa
+                        </button>
+
+                    </div>
+
+                </form>
+
+
+                <!-- =========================================
+                     RESULTADO
+                ========================================== -->
+
+                <section
+                    id="result"
+                    class="result-section"
+                    aria-live="polite"
+                    hidden
+                >
+
+                    <div class="result-header">
+
+                        <span class="result-label">
+                            ESTIMATIVA DO PROJETO
+                        </span>
+
+                        <h2 id="final-price">
+                            R$ 0,00
+                        </h2>
+
+                        <p>
+                            Valor estimado com base nas opções selecionadas.
+                        </p>
+
+                    </div>
+
+
+                    <div class="result-details">
+
+                        <h3>
+                            Detalhamento do orçamento
+                        </h3>
+
+
+                        <div class="detail-row">
+
+                            <span>
+                                Projeto base
+                            </span>
+
+                            <strong id="detail-project">
+                                R$ 0,00
+                            </strong>
+
+                        </div>
+
+
+                        <div class="detail-row">
+
+                            <span>
+                                Páginas adicionais
+                            </span>
+
+                            <strong id="detail-pages">
+                                R$ 0,00
+                            </strong>
+
+                        </div>
+
+
+                        <div class="detail-row">
+
+                            <span>
+                                Funcionalidades
+                            </span>
+
+                            <strong id="detail-features">
+                                R$ 0,00
+                            </strong>
+
+                        </div>
+
+
+                        <div class="detail-row">
+
+                            <span>
+                                Design personalizado
+                            </span>
+
+                            <strong id="detail-design">
+                                R$ 0,00
+                            </strong>
+
+                        </div>
+
+
+                        <div class="detail-row">
+
+                            <span>
+                                Prazo
+                            </span>
+
+                            <strong id="detail-deadline">
+                                R$ 0,00
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="maintenance-result">
+
+                        <div>
+
+                            <span>
+                                Manutenção mensal
+                            </span>
+
+                            <small>
+                                Valor mensal sugerido
+                            </small>
+
+                        </div>
+
+                        <strong id="result-maintenance">
+                            Não incluída
+                        </strong>
+
+                    </div>
+
+
+                    <p class="result-disclaimer">
+                        Esta estimativa serve como referência para estruturar
+                        seu orçamento. Ajuste o valor conforme a complexidade,
+                        custos e necessidades específicas do projeto.
+                    </p>
+
+
+                    <div class="result-actions">
+
+                        <button
+                            type="button"
+                            id="copy-summary"
+                            class="secondary-button"
+                        >
+                            Copiar resumo
+                        </button>
+
+
+                        <button
+                            type="button"
+                            id="new-simulation"
+                            class="primary-button"
+                        >
+                            Nova simulação
+                        </button>
+
+                    </div>
+
+
+                    <p
+                        id="copy-feedback"
+                        class="copy-feedback"
+                        aria-live="polite"
+                    ></p>
+
+                </section>
+
+            </section>
+
+        </div>
+
+    </main>
+
+
+    <!-- =========================================
+         FOOTER
+    ========================================== -->
+
+    <footer class="footer">
+
+        <div class="container">
+
+            <p>
+                NEXA Digital
+            </p>
+
+        </div>
+
+    </footer>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
