@@ -1,27 +1,34 @@
 /* =========================================
    NEXA CALCULADORA
    ESTILO PRINCIPAL
+   Define as variáveis de cores, sombras, bordas e fontes para toda a aplicação.
 ========================================= */
 
 :root {
 
+    /* Cores primárias e suas variações */
     --color-primary: #2563eb;
     --color-primary-dark: #1d4ed8;
     --color-primary-light: #eff6ff;
 
+    /* Cores de texto para diferentes níveis de destaque */
     --color-text: #111827;
     --color-text-secondary: #64748b;
     --color-text-light: #94a3b8;
 
+    /* Cores de fundo e branco padrão */
     --color-background: #f5f7fa;
     --color-white: #ffffff;
 
+    /* Cores para bordas e linhas divisórias */
     --color-border: #dfe4ea;
     --color-border-dark: #cbd5e1;
 
+    /* Cores para mensagens de sucesso e erro */
     --color-success: #16a34a;
     --color-error: #dc2626;
 
+    /* Definições de sombras para elementos da interface */
     --shadow-sm:
         0 2px 6px rgba(15, 23, 42, 0.06);
 
@@ -31,16 +38,19 @@
     --shadow-lg:
         0 20px 50px rgba(15, 23, 42, 0.10);
 
+    /* Raios de borda para arredondamento de elementos */
     --radius-sm: 9px;
     --radius-md: 13px;
     --radius-lg: 18px;
 
+    /* Largura máxima do container de conteúdo */
     --container-width: 1040px;
 }
 
 
 /* =========================================
-   RESET
+   RESET BÁSICO
+   Garante uma base consistente para todos os elementos HTML.
 ========================================= */
 
 * {
@@ -52,13 +62,16 @@
 
 html {
     scroll-behavior: smooth;
+    /* Suaviza a rolagem da página */
 }
 
 
 body {
 
     min-height: 100vh;
+    /* Garante que o body ocupe a altura total da viewport */
 
+    /* Definição da família de fontes, priorizando 'Inter' */
     font-family:
         Inter,
         -apple-system,
@@ -69,31 +82,39 @@ body {
         sans-serif;
 
     background: var(--color-background);
+    /* Cor de fundo geral da aplicação */
 
     color: var(--color-text);
+    /* Cor de texto padrão */
 
     font-size: 17px;
+    /* Tamanho de fonte base */
 
     line-height: 1.65;
+    /* Altura da linha para melhor legibilidade */
 
     -webkit-font-smoothing: antialiased;
+    /* Suavização de fontes para WebKit */
 }
 
 
 button,
 input {
     font: inherit;
+    /* Garante que botões e inputs herdem as propriedades de fonte */
 }
 
 
 button {
     cursor: pointer;
+    /* Indica que o botão é clicável */
 }
 
 
 button:focus-visible,
 input:focus-visible {
 
+    /* Estilo de foco para acessibilidade, visível apenas com teclado */
     outline: 3px solid rgba(37, 99, 235, 0.22);
 
     outline-offset: 3px;
@@ -102,49 +123,59 @@ input:focus-visible {
 
 .container {
 
-    width: min(
-        calc(100% - 48px),
-        var(--container-width)
-    );
+    /* Centraliza o conteúdo e define uma largura máxima com margens laterais */
+    width: min(calc(100% - 48px),
+            /* Garante um padding mínimo nas laterais */
+            var(--container-width));
 
     margin: 0 auto;
 }
 
 
 /* =========================================
-   HEADER
+   ESTILOS DO CABEÇALHO
+   Contém o logo e o título da calculadora.
 ========================================= */
 
 .header {
 
     background: var(--color-white);
+    /* Fundo branco para o cabeçalho */
 
     border-bottom: 1px solid var(--color-border);
+    /* Linha divisória inferior */
 
     padding: 38px 0 42px;
+    /* Espaçamento interno */
 }
 
 
 .header-container {
 
     display: flex;
+    /* Layout flexível para alinhar itens */
 
     align-items: center;
+    /* Alinha itens verticalmente ao centro */
 }
 
 
 .brand {
 
     display: flex;
+    /* Layout flexível para o logo e informações */
 
     align-items: center;
+    /* Alinha itens verticalmente ao centro */
 
     gap: 27px;
+    /* Espaçamento entre os itens */
 }
 
 
 /* =========================================
-   LOGO
+   ESTILOS DO LOGO
+   Define a aparência do logotipo da NEXA.
 ========================================= */
 
 .brand-logo {
@@ -152,13 +183,16 @@ input:focus-visible {
     height: 105px;
 
     display: flex;
+    /* Centraliza a imagem do logo */
 
     align-items: center;
     justify-content: center;
 
     flex-shrink: 0;
+    /* Impede que o logo encolha */
 
     overflow: hidden;
+    /* Garante que a imagem não transborde */
 
     border: 1px solid #dfe4ea;
     border-radius: 16px;
@@ -171,48 +205,59 @@ input:focus-visible {
 
 .brand-logo img {
     display: block;
+    /* Remove espaço extra abaixo da imagem */
 
     width: 100%;
     height: 100%;
 
     object-fit: contain;
+    /* Garante que a imagem se ajuste sem cortar */
 
     transform: scale(1.32);
+    /* Ajuste visual para o logo */
 }
 
 /* =========================================
-   TÍTULO DO HEADER
+   ESTILOS DO TÍTULO E DESCRIÇÃO DO CABEÇALHO
 ========================================= */
 
 .brand-info {
 
     display: flex;
+    /* Layout flexível para o título e parágrafo */
 
     flex-direction: column;
+    /* Organiza os itens em coluna */
 
     gap: 8px;
+    /* Espaçamento entre o título e a descrição */
 }
 
 
 .brand-info h1 {
 
     margin: 0;
+    /* Remove margem padrão */
 
     color: var(--color-text);
 
     font-size: 2.35rem;
+    /* Tamanho do título principal */
 
     line-height: 1.15;
 
     font-weight: 800;
+    /* Peso da fonte para destaque */
 
     letter-spacing: -0.045em;
+    /* Ajuste de espaçamento entre letras */
 }
 
 
 .brand-info p {
 
     margin: 0;
+    /* Remove margem padrão */
 
     color: var(--color-text-secondary);
 
@@ -223,76 +268,94 @@ input:focus-visible {
 
 
 /* =========================================
-   MAIN
+   ESTILOS DA SEÇÃO PRINCIPAL (MAIN)
 ========================================= */
 
 .main {
 
     padding: 46px 0 80px;
+    /* Espaçamento interno superior e inferior */
 }
 
 
 /* =========================================
-   CALCULADORA
+   ESTILOS DA CALCULADORA
+   Contém o formulário e a área de resultados.
 ========================================= */
 
 .calculator {
 
     background: var(--color-white);
+    /* Fundo branco para a calculadora */
 
     border: 1px solid var(--color-border);
+    /* Borda sutil */
 
     border-radius: var(--radius-lg);
+    /* Bordas arredondadas */
 
     box-shadow: var(--shadow-lg);
+    /* Sombra para dar profundidade */
 
     overflow: hidden;
+    /* Garante que o conteúdo não transborde as bordas arredondadas */
 }
 
 
 /* =========================================
-   FORMULÁRIO
+   ESTILOS DO FORMULÁRIO DA CALCULADORA
 ========================================= */
 
 #calculator-form {
 
     padding: 48px;
+    /* Espaçamento interno do formulário */
 }
 
 
 /* =========================================
-   SEÇÕES
+   ESTILOS DAS SEÇÕES DO FORMULÁRIO
+   Cada etapa da calculadora é uma seção.
 ========================================= */
 
 .form-section {
 
     padding-bottom: 45px;
+    /* Espaçamento inferior para separar seções */
 
     margin-bottom: 45px;
+    /* Margem inferior para separar seções */
 
     border-bottom: 1px solid var(--color-border);
+    /* Linha divisória entre seções */
 }
 
 
 .form-section:last-of-type {
 
     margin-bottom: 0;
+    /* Remove a margem da última seção */
 }
 
 
 /* =========================================
-   CABEÇALHO DA SEÇÃO
+   ESTILOS DO CABEÇALHO DE CADA SEÇÃO
+   Inclui o número da seção, título e descrição.
 ========================================= */
 
 .section-heading {
 
     display: flex;
+    /* Layout flexível para alinhar número e conteúdo */
 
     align-items: flex-start;
+    /* Alinha itens ao topo */
 
     gap: 18px;
+    /* Espaçamento entre o número e o conteúdo */
 
     margin-bottom: 27px;
+    /* Margem inferior */
 }
 
 
@@ -302,17 +365,21 @@ input:focus-visible {
     height: 42px;
 
     display: flex;
+    /* Centraliza o número */
 
     align-items: center;
     justify-content: center;
 
     flex-shrink: 0;
+    /* Impede que o número encolha */
 
     border-radius: 10px;
 
     background: var(--color-primary-light);
+    /* Fundo claro para o número */
 
     color: var(--color-primary);
+    /* Cor primária para o número */
 
     font-size: 0.95rem;
 
@@ -323,10 +390,13 @@ input:focus-visible {
 .section-heading-content {
 
     display: flex;
+    /* Layout flexível para título e parágrafo */
 
     flex-direction: column;
+    /* Organiza em coluna */
 
     gap: 3px;
+    /* Espaçamento entre título e descrição */
 }
 
 
@@ -355,30 +425,37 @@ input:focus-visible {
 
 
 /* =========================================
-   GRID DE OPÇÕES
+   ESTILOS DO GRID DE OPÇÕES (RADIO BUTTONS)
 ========================================= */
 
 .options-grid {
 
     display: grid;
+    /* Layout de grid para as opções */
 
     grid-template-columns: repeat(2, 1fr);
+    /* Duas colunas de largura igual */
 
     gap: 16px;
+    /* Espaçamento entre os cards */
 }
 
 
 /* =========================================
-   CARD DE OPÇÃO
+   ESTILOS DO CARD DE OPÇÃO INDIVIDUAL
+   Usado para seleção de tipo de projeto, páginas, design e prazo.
 ========================================= */
 
 .option-card {
 
     position: relative;
+    /* Necessário para posicionar o input */
 
     display: block;
+    /* Garante que o label ocupe todo o espaço */
 
     min-height: 112px;
+    /* Altura mínima para consistência */
 
     border: 1px solid var(--color-border);
 
@@ -387,7 +464,9 @@ input:focus-visible {
     background: var(--color-white);
 
     cursor: pointer;
+    /* Indica que o card é clicável */
 
+    /* Transições suaves para interações do usuário */
     transition:
         border-color 0.2s ease,
         background-color 0.2s ease,
@@ -399,36 +478,47 @@ input:focus-visible {
 .option-card:hover {
 
     border-color: #93c5fd;
+    /* Borda azul clara ao passar o mouse */
 
     box-shadow: var(--shadow-sm);
+    /* Sombra sutil */
 
     transform: translateY(-2px);
+    /* Efeito de "levantar" */
 }
 
 
 .option-card input {
 
     position: absolute;
+    /* Esconde o radio button nativo */
 
     opacity: 0;
 
     pointer-events: none;
+    /* Impede interação direta com o input escondido */
 }
 
 
 .option-content {
 
     min-height: 112px;
+    /* Garante a altura mínima do conteúdo */
 
     display: flex;
+    /* Layout flexível para título e descrição */
 
     flex-direction: column;
+    /* Organiza em coluna */
 
     justify-content: center;
+    /* Centraliza verticalmente */
 
     gap: 7px;
+    /* Espaçamento entre título e descrição */
 
     padding: 22px 24px;
+    /* Espaçamento interno */
 }
 
 
@@ -455,51 +545,65 @@ input:focus-visible {
 
 
 /* =========================================
-   OPÇÃO SELECIONADA
+   ESTILOS PARA OPÇÃO SELECIONADA
+   Destaca o card quando o radio button interno está marcado.
 ========================================= */
 
 .option-card:has(input:checked) {
 
     border-color: var(--color-primary);
+    /* Borda primária */
 
     background: var(--color-primary-light);
+    /* Fundo claro primário */
 
     box-shadow:
         0 0 0 1px var(--color-primary);
+    /* Borda interna para destaque */
 }
 
 
 .option-card:has(input:checked) .option-content strong {
 
     color: var(--color-primary-dark);
+    /* Cor de texto mais escura */
 }
 
 
 /* =========================================
-   CHECKBOXES
+   ESTILOS DO GRID DE CHECKBOXES
+   Usado para seleção de funcionalidades extras.
 ========================================= */
 
 .checkbox-grid {
 
     display: grid;
+    /* Layout de grid para os checkboxes */
 
     grid-template-columns: repeat(2, 1fr);
+    /* Duas colunas de largura igual */
 
     gap: 13px;
+    /* Espaçamento entre os checkboxes */
 }
 
 
 .checkbox-option {
 
     min-height: 60px;
+    /* Altura mínima para consistência */
 
     display: flex;
+    /* Layout flexível para alinhar checkbox e texto */
 
     align-items: center;
+    /* Alinha verticalmente ao centro */
 
     gap: 13px;
+    /* Espaçamento entre checkbox e texto */
 
     padding: 15px 18px;
+    /* Espaçamento interno */
 
     border: 1px solid var(--color-border);
 
@@ -512,7 +616,9 @@ input:focus-visible {
     font-size: 1rem;
 
     cursor: pointer;
+    /* Indica que o item é clicável */
 
+    /* Transições suaves para interações do usuário */
     transition:
         border-color 0.2s ease,
         background-color 0.2s ease,
@@ -523,8 +629,10 @@ input:focus-visible {
 .checkbox-option:hover {
 
     border-color: #93c5fd;
+    /* Borda azul clara ao passar o mouse */
 
     background: #fafcff;
+    /* Fundo levemente azulado */
 }
 
 
@@ -534,32 +642,41 @@ input:focus-visible {
     height: 20px;
 
     flex-shrink: 0;
+    /* Impede que o checkbox encolha */
 
     accent-color: var(--color-primary);
+    /* Cor de destaque do checkbox */
 }
 
 
 .checkbox-option:has(input:checked) {
 
     border-color: var(--color-primary);
+    /* Borda primária quando marcado */
 
     background: var(--color-primary-light);
+    /* Fundo claro primário */
 }
 
 
 /* =========================================
-   MANUTENÇÃO
+   ESTILOS DA SEÇÃO DE MANUTENÇÃO
+   Opção de checkbox e pré-visualização do valor.
 ========================================= */
 
 .maintenance-option {
 
     min-height: 78px;
+    /* Altura mínima para consistência */
 
     display: flex;
+    /* Layout flexível para alinhar checkbox e texto */
 
     align-items: flex-start;
+    /* Alinha itens ao topo */
 
     gap: 15px;
+    /* Espaçamento entre checkbox e texto */
 
     padding: 20px;
 
@@ -571,6 +688,7 @@ input:focus-visible {
 
     cursor: pointer;
 
+    /* Transições suaves */
     transition:
         border-color 0.2s ease,
         background-color 0.2s ease;
@@ -580,6 +698,7 @@ input:focus-visible {
 .maintenance-option:hover {
 
     border-color: #93c5fd;
+    /* Borda azul clara ao passar o mouse */
 }
 
 
@@ -589,6 +708,7 @@ input:focus-visible {
     height: 20px;
 
     margin-top: 3px;
+    /* Ajuste de alinhamento visual */
 
     flex-shrink: 0;
 
@@ -599,10 +719,13 @@ input:focus-visible {
 .maintenance-option span {
 
     display: flex;
+    /* Layout flexível para título e descrição */
 
     flex-direction: column;
+    /* Organiza em coluna */
 
     gap: 4px;
+    /* Espaçamento entre título e descrição */
 }
 
 
@@ -625,10 +748,12 @@ input:focus-visible {
 .maintenance-preview {
 
     display: flex;
+    /* Layout flexível para alinhar texto e valor */
 
     align-items: center;
 
     justify-content: space-between;
+    /* Espaça os itens */
 
     gap: 20px;
 
@@ -655,10 +780,12 @@ input:focus-visible {
 
 
 /* =========================================
-   ERROS
+   ESTILOS PARA MENSAGENS DE ERRO
+   Exibe feedback quando o formulário não é preenchido corretamente.
 ========================================= */
 
 .error-message {
+    /* Este estilo não está sendo usado diretamente no HTML atual, mas é uma boa prática mantê-lo */
 
     min-height: 0;
 
@@ -673,18 +800,22 @@ input:focus-visible {
 .form-error {
 
     display: none;
+    /* Escondido por padrão */
 
     margin-bottom: 22px;
 
     padding: 14px 16px;
 
     border: 1px solid #fecaca;
+    /* Borda vermelha clara */
 
     border-radius: var(--radius-sm);
 
     background: #fef2f2;
+    /* Fundo vermelho muito claro */
 
     color: var(--color-error);
+    /* Cor de texto de erro */
 
     font-size: 0.92rem;
 }
@@ -693,18 +824,22 @@ input:focus-visible {
 .form-error.visible {
 
     display: block;
+    /* Torna visível quando a classe 'visible' é adicionada */
 }
 
 
 /* =========================================
-   BOTÕES
+   ESTILOS DOS BOTÕES DE AÇÃO
+   Botão de calcular e botões de resultado.
 ========================================= */
 
 .form-actions {
 
     display: flex;
+    /* Layout flexível para alinhar botões */
 
     justify-content: flex-end;
+    /* Alinha o botão à direita */
 
     padding-top: 5px;
 }
@@ -723,6 +858,7 @@ input:focus-visible {
 
     font-weight: 700;
 
+    /* Transições suaves para interações */
     transition:
         background-color 0.2s ease,
         border-color 0.2s ease,
@@ -751,6 +887,7 @@ input:focus-visible {
     border-color: var(--color-primary-dark);
 
     transform: translateY(-2px);
+    /* Efeito de "levantar" */
 
     box-shadow:
         0 7px 16px rgba(37, 99, 235, 0.22);
@@ -778,7 +915,8 @@ input:focus-visible {
 
 
 /* =========================================
-   RESULTADO
+   ESTILOS DA SEÇÃO DE RESULTADO
+   Exibe a estimativa final e o detalhamento.
 ========================================= */
 
 .result-section {
@@ -786,8 +924,10 @@ input:focus-visible {
     padding: 48px;
 
     border-top: 1px solid var(--color-border);
+    /* Linha divisória superior */
 
     background: #f8fafc;
+    /* Fundo levemente cinza */
 }
 
 
@@ -796,6 +936,7 @@ input:focus-visible {
     padding-bottom: 35px;
 
     text-align: center;
+    /* Centraliza o texto */
 }
 
 
@@ -822,6 +963,7 @@ input:focus-visible {
     color: var(--color-text);
 
     font-size: clamp(2.5rem, 6vw, 3.6rem);
+    /* Tamanho de fonte responsivo */
 
     line-height: 1.05;
 
@@ -834,8 +976,10 @@ input:focus-visible {
 .result-header p {
 
     max-width: 600px;
+    /* Limita a largura do parágrafo */
 
     margin: 0 auto;
+    /* Centraliza o parágrafo */
 
     color: var(--color-text-secondary);
 
@@ -844,14 +988,17 @@ input:focus-visible {
 
 
 /* =========================================
-   DETALHAMENTO
+   ESTILOS DO DETALHAMENTO DO ORÇAMENTO
+   Lista os valores de cada componente do projeto.
 ========================================= */
 
 .result-details {
 
     max-width: 720px;
+    /* Limita a largura do detalhamento */
 
     margin: 0 auto;
+    /* Centraliza o detalhamento */
 
     padding: 25px 27px;
 
@@ -882,14 +1029,17 @@ input:focus-visible {
     min-height: 48px;
 
     display: flex;
+    /* Layout flexível para alinhar label e valor */
 
     align-items: center;
 
     justify-content: space-between;
+    /* Espaça os itens */
 
     gap: 20px;
 
     border-bottom: 1px solid var(--color-border);
+    /* Linha divisória entre os detalhes */
 
     font-size: 0.98rem;
 }
@@ -898,6 +1048,7 @@ input:focus-visible {
 .detail-row:last-child {
 
     border-bottom: 0;
+    /* Remove a borda do último item */
 }
 
 
@@ -918,7 +1069,8 @@ input:focus-visible {
 
 
 /* =========================================
-   MANUTENÇÃO NO RESULTADO
+   ESTILOS DA SEÇÃO DE MANUTENÇÃO NO RESULTADO
+   Exibe o status da manutenção mensal.
 ========================================= */
 
 .maintenance-result {
@@ -940,10 +1092,12 @@ input:focus-visible {
     padding: 19px 23px;
 
     border: 1px solid #bfdbfe;
+    /* Borda azul clara */
 
     border-radius: var(--radius-md);
 
     background: var(--color-primary-light);
+    /* Fundo claro primário */
 }
 
 
@@ -982,7 +1136,7 @@ input:focus-visible {
 
 
 /* =========================================
-   AVISO
+   ESTILOS DO AVISO LEGAL NO RESULTADO
 ========================================= */
 
 .result-disclaimer {
@@ -1002,7 +1156,8 @@ input:focus-visible {
 
 
 /* =========================================
-   AÇÕES DO RESULTADO
+   ESTILOS DAS AÇÕES DO RESULTADO
+   Botões de copiar resumo e nova simulação.
 ========================================= */
 
 .result-actions {
@@ -1034,7 +1189,7 @@ input:focus-visible {
 
 
 /* =========================================
-   FOOTER
+   ESTILOS DO RODAPÉ
 ========================================= */
 
 .footer {
@@ -1050,17 +1205,16 @@ input:focus-visible {
 
 
 /* =========================================
-   RESPONSIVIDADE
+   RESPONSIVIDADE - AJUSTES PARA TELAS MÉDIAS (TABLETS)
 ========================================= */
 
 @media (max-width: 800px) {
 
     .container {
 
-        width: min(
-            calc(100% - 32px),
-            var(--container-width)
-        );
+        width: min(calc(100% - 32px),
+                /* Ajusta o padding lateral */
+                var(--container-width));
     }
 
 
@@ -1081,13 +1235,14 @@ input:focus-visible {
     .result-section {
 
         padding: 36px 30px;
+        /* Reduz o padding interno */
     }
 
 }
 
 
 /* =========================================
-   CELULAR
+   RESPONSIVIDADE - AJUSTES PARA TELAS PEQUENAS (CELULARES)
 ========================================= */
 
 @media (max-width: 650px) {
@@ -1095,12 +1250,14 @@ input:focus-visible {
     body {
 
         font-size: 16px;
+        /* Reduz o tamanho da fonte base */
     }
 
 
     .container {
 
         width: calc(100% - 24px);
+        /* Ajusta o padding lateral */
     }
 
 
@@ -1109,14 +1266,17 @@ input:focus-visible {
     .header {
 
         padding: 28px 0 32px;
+        /* Reduz o padding do cabeçalho */
     }
 
 
     .brand {
 
         align-items: flex-start;
+        /* Alinha itens ao topo */
 
         gap: 17px;
+        /* Reduz o espaçamento */
     }
 
 
@@ -1156,6 +1316,7 @@ input:focus-visible {
     .main {
 
         padding: 22px 0 50px;
+        /* Reduz o padding do conteúdo principal */
     }
 
 
@@ -1164,6 +1325,7 @@ input:focus-visible {
     #calculator-form {
 
         padding: 30px 20px;
+        /* Reduz o padding do formulário */
     }
 
 
@@ -1212,6 +1374,7 @@ input:focus-visible {
     .checkbox-grid {
 
         grid-template-columns: 1fr;
+        /* Uma única coluna para telas pequenas */
     }
 
 
@@ -1245,6 +1408,7 @@ input:focus-visible {
     .form-actions {
 
         display: block;
+        /* Botão ocupa a largura total */
     }
 
 
@@ -1259,6 +1423,7 @@ input:focus-visible {
     .result-section {
 
         padding: 34px 20px;
+        /* Reduz o padding da seção de resultado */
     }
 
 
@@ -1271,6 +1436,7 @@ input:focus-visible {
     .result-actions {
 
         flex-direction: column;
+        /* Botões de ação em coluna */
     }
 
 
@@ -1289,7 +1455,7 @@ input:focus-visible {
 
 
 /* =========================================
-   CELULARES PEQUENOS
+   RESPONSIVIDADE - AJUSTES PARA CELULARES MUITO PEQUENOS
 ========================================= */
 
 @media (max-width: 420px) {
@@ -1297,6 +1463,7 @@ input:focus-visible {
     .container {
 
         width: calc(100% - 18px);
+        /* Ajusta o padding lateral */
     }
 
 
@@ -1372,13 +1539,15 @@ input:focus-visible {
         align-items: flex-start;
 
         flex-direction: column;
+        /* Itens da manutenção em coluna */
     }
 
 }
 
 
 /* =========================================
-   ACESSIBILIDADE
+   ACESSIBILIDADE - PREFERÊNCIAS DE MOVIMENTO REDUZIDO
+   Desativa transições e animações para usuários com essa preferência.
 ========================================= */
 
 @media (prefers-reduced-motion: reduce) {
@@ -1386,6 +1555,7 @@ input:focus-visible {
     html {
 
         scroll-behavior: auto;
+        /* Desativa rolagem suave */
     }
 
 
@@ -1394,6 +1564,7 @@ input:focus-visible {
     *::after {
 
         transition: none !important;
+        /* Desativa todas as transições */
     }
 
 }

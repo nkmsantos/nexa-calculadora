@@ -1,9 +1,11 @@
 /* =========================================
    NEXA CALCULADORA
-   Configuração de preços
+   Configuração de preços e lógica de cálculo para estimativa de projetos.
 ========================================= */
 
-const precos = {
+// Objeto que armazena os valores base para cada tipo de serviço e funcionalidade.
+// A estrutura reflete as opções disponíveis no formulário.
+const precosServicos = {
     projetos: {
         landingPage: 800,
         institucional: 1200,
@@ -12,7 +14,7 @@ const precos = {
     },
 
     paginas: {
-        uma: 0,
+        uma: 0, // A primeira página geralmente está inclusa no valor base do projeto
         duasQuatro: 300,
         cincoSete: 600,
         oitoMais: 900
@@ -30,54 +32,63 @@ const precos = {
     },
 
     design: {
-        simples: 0,
+        simples: 0, // Design simples geralmente não adiciona custo extra
         personalizado: 100
     },
 
     prazo: {
-        normal: 0,
-        reduzido: 0.10,
-        urgente: 0.20
+        normal: 0, // Prazo normal não tem adicional
+        reduzido: 0.10, // 10% de adicional para prazo reduzido
+        urgente: 0.20 // 20% de adicional para prazo urgente
     },
 
-    manutencao: 100
+    manutencaoMensal: 100 // Valor fixo para manutenção mensal
 };
 
 
 /* =========================================
-   ELEMENTOS DA INTERFACE
+   REFERÊNCIAS AOS ELEMENTOS DA INTERFACE (DOM)
+   Facilita o acesso e manipulação dos elementos HTML no JavaScript.
 ========================================= */
 
-const form = document.getElementById("calculator-form");
+const formularioCalculadora = document.getElementById("calculator-form");
 
-const resultSection = document.getElementById("result");
+const secaoResultado = document.getElementById("result-section");
 
-const finalPrice = document.getElementById("final-price");
+const precoFinalElemento = document.getElementById("final-price");
 
-const detailProject = document.getElementById("detail-project");
-const detailPages = document.getElementById("detail-pages");
-const detailFeatures = document.getElementById("detail-features");
-const detailDesign = document.getElementById("detail-design");
-const detailDeadline = document.getElementById("detail-deadline");
+// Elementos para exibir o detalhamento do orçamento
+const detalheProjetoValor = document.getElementById("detail-project-value");
+const detalhePaginasValor = document.getElementById("detail-pages-value");
+const detalheFuncionalidadesValor = document.getElementById("detail-features-value");
+const detalheDesignValor = document.getElementById("detail-design-value");
+const detalhePrazoValor = document.getElementById("detail-deadline-value");
 
-const maintenanceCheckbox = document.getElementById("maintenance");
-const maintenancePreview = document.getElementById("maintenance-preview");
-const maintenanceValue = document.getElementById("maintenance-value");
-const resultMaintenance = document.getElementById("result-maintenance");
+// Elementos relacionados à manutenção
+const checkboxManutencao = document.getElementById("maintenance-checkbox");
+const preVisualizacaoManutencao = document.getElementById("maintenance-preview");
+const valorManutencaoExibicao = document.getElementById("maintenance-value");
+const statusManutencaoResultado = document.getElementById("result-maintenance-status");
 
-const formError = document.getElementById("form-error");
+// Elemento para exibir mensagens de erro do formulário
+const mensagemErroFormulario = document.getElementById("form-error-message");
 
-const copyButton = document.getElementById("copy-summary");
-const copyFeedback = document.getElementById("copy-feedback");
-
-const newSimulationButton = document.getElementById("new-simulation");
+// Botões de ação
+const botaoCopiarResumo = document.getElementById("copy-summary-button");
+const feedbackCopiaMensagem = document.getElementById("copy-feedback-message");
+const botaoNovaSimulacao = document.getElementById("new-simulation-button");
 
 
 /* =========================================
-   FORMATAÇÃO DE VALORES
+   FUNÇÕES AUXILIARES DE FORMATAÇÃO
 ========================================= */
 
-function formatarMoeda(valor) {
+/**
+ * Formata um valor numérico para o formato de moeda brasileira (BRL).
+ * @param {number} valor - O número a ser formatado.
+ * @returns {string} O valor formatado como moeda.
+ */
+function formatarValorParaMoeda(valor) {
     return valor.toLocaleString("pt-BR", {
         style: "currency",
         currency: "BRL"
@@ -86,179 +97,196 @@ function formatarMoeda(valor) {
 
 
 /* =========================================
-   BUSCAR OPÇÃO SELECIONADA
+   FUNÇÕES AUXILIARES PARA OBTER DADOS DO FORMULÁRIO
 ========================================= */
 
-function obterValorSelecionado(nome) {
-    const selecionado = document.querySelector(
-        `input[name="${nome}"]:checked`
+/**
+ * Obtém o valor do radio button selecionado em um grupo específico.
+ * @param {string} nomeDoGrupo - O atributo 'name' do grupo de radio buttons.
+ * @returns {string|null} O 'value' do radio button selecionado, ou null se nenhum for selecionado.
+ */
+function obterOpcaoSelecionada(nomeDoGrupo) {
+    const elementoSelecionado = document.querySelector(
+        `input[name="${nomeDoGrupo}"]:checked`
     );
-
-    return selecionado ? selecionado.value : null;
+    return elementoSelecionado ? elementoSelecionado.value : null;
 }
 
-
-/* =========================================
-   BUSCAR FUNCIONALIDADES
-========================================= */
-
-function obterFuncionalidadesSelecionadas() {
-    const selecionadas = document.querySelectorAll(
+/**
+ * Obtém um array com os valores de todos os checkboxes marcados no grupo 'features'.
+ * @returns {string[]} Um array de strings com os valores das funcionalidades selecionadas.
+ */
+function obterFuncionalidadesMarcadas() {
+    const checkboxesMarcados = document.querySelectorAll(
         'input[name="features"]:checked'
     );
-
-    return Array.from(selecionadas).map(
+    // Converte a NodeList para Array e mapeia para obter apenas os valores.
+    return Array.from(checkboxesMarcados).map(
         (checkbox) => checkbox.value
     );
 }
 
 
 /* =========================================
-   CALCULAR FUNCIONALIDADES
+   FUNÇÕES DE CÁLCULO ESPECÍFICAS
 ========================================= */
 
-function calcularFuncionalidades(funcionalidades) {
-    return funcionalidades.reduce((total, funcionalidade) => {
-        return total + (precos.funcionalidades[funcionalidade] || 0);
-    }, 0);
+/**
+ * Calcula o custo total das funcionalidades extras selecionadas.
+ * @param {string[]} listaDeFuncionalidades - Array com os nomes das funcionalidades selecionadas.
+ * @returns {number} O valor total das funcionalidades.
+ */
+function calcularCustoFuncionalidades(listaDeFuncionalidades) {
+    // Utiliza 'reduce' para somar os preços de cada funcionalidade.
+    return listaDeFuncionalidades.reduce((totalAcumulado, funcionalidadeAtual) => {
+        // Garante que a funcionalidade exista no objeto de preços, caso contrário, adiciona 0.
+        return totalAcumulado + (precosServicos.funcionalidades[funcionalidadeAtual] || 0);
+    }, 0); // O valor inicial da soma é 0.
+}
+
+
+/**
+ * Calcula o adicional percentual baseado no prazo de entrega escolhido.
+ * @param {number} valorBaseDoProjeto - O subtotal do projeto antes do adicional de prazo.
+ * @param {string} tipoDePrazo - O tipo de prazo selecionado (normal, reduzido, urgente).
+ * @returns {number} O valor adicional a ser somado ao projeto devido ao prazo.
+ */
+function calcularAdicionalPrazo(valorBaseDoProjeto, tipoDePrazo) {
+    const percentualAdicional = precosServicos.prazo[tipoDePrazo] || 0;
+    return valorBaseDoProjeto * percentualAdicional;
 }
 
 
 /* =========================================
-   CALCULAR ADICIONAL DE PRAZO
+   FUNÇÕES DE VALIDAÇÃO E FEEDBACK DO FORMULÁRIO
 ========================================= */
 
-function calcularPrazo(valorBase, tipoPrazo) {
-    const percentual = precos.prazo[tipoPrazo] || 0;
-
-    return valorBase * percentual;
-}
-
-
-/* =========================================
-   VALIDAR FORMULÁRIO
-========================================= */
-
+/**
+ * Valida se todas as opções obrigatórias do formulário foram selecionadas.
+ * Exibe uma mensagem de erro se alguma opção estiver faltando.
+ * @returns {boolean} True se o formulário for válido, False caso contrário.
+ */
 function validarFormulario() {
-    limparErro();
+    limparMensagemErro(); // Limpa qualquer erro anterior antes de validar novamente.
 
-    const tipoProjeto = obterValorSelecionado("project-type");
-    const paginas = obterValorSelecionado("pages");
-    const design = obterValorSelecionado("design");
-    const prazo = obterValorSelecionado("deadline");
+    // Obtém os valores das opções obrigatórias.
+    const tipoProjeto = obterOpcaoSelecionada("project-type");
+    const paginas = obterOpcaoSelecionada("pages");
+    const design = obterOpcaoSelecionada("design");
+    const prazo = obterOpcaoSelecionada("deadline"); // CORRIGIDO: Era 'obterOpterOpcaoSelecionada'
 
+    // Verifica cada campo obrigatório e exibe um erro se estiver faltando.
     if (!tipoProjeto) {
-        mostrarErro("Selecione o tipo de projeto para continuar.");
+        exibirMensagemErro("Por favor, selecione o tipo de projeto para continuar.");
         return false;
     }
 
     if (!paginas) {
-        mostrarErro("Selecione a quantidade de páginas para continuar.");
+        exibirMensagemErro("Por favor, selecione a quantidade de páginas para continuar.");
         return false;
     }
 
     if (!design) {
-        mostrarErro("Selecione uma opção de design para continuar.");
+        exibirMensagemErro("Por favor, selecione uma opção de design para continuar.");
         return false;
     }
 
     if (!prazo) {
-        mostrarErro("Selecione o prazo desejado para continuar.");
+        exibirMensagemErro("Por favor, selecione o prazo desejado para continuar.");
         return false;
     }
 
-    return true;
+    return true; // Se todas as verificações passarem, o formulário é válido.
 }
 
 
-/* =========================================
-   MENSAGENS DE ERRO
-========================================= */
+/**
+ * Exibe uma mensagem de erro no elemento de feedback do formulário.
+ * @param {string} mensagem - A mensagem de erro a ser exibida.
+ */
+function exibirMensagemErro(mensagem) {
+    mensagemErroFormulario.textContent = mensagem;
+    mensagemErroFormulario.classList.add("visible");
 
-function mostrarErro(mensagem) {
-    formError.textContent = mensagem;
-    formError.classList.add("visible");
-
-    formError.scrollIntoView({
+    // Rola a página até a mensagem de erro para que o usuário a veja.
+    mensagemErroFormulario.scrollIntoView({
         behavior: "smooth",
         block: "center"
     });
 }
 
 
-function limparErro() {
-    formError.textContent = "";
-    formError.classList.remove("visible");
+/**
+ * Limpa qualquer mensagem de erro exibida no formulário.
+ */
+function limparMensagemErro() {
+    mensagemErroFormulario.textContent = "";
+    mensagemErroFormulario.classList.remove("visible");
 }
 
 
 /* =========================================
-   CALCULAR ESTIMATIVA
+   FUNÇÃO PRINCIPAL DE CÁLCULO DA ESTIMATIVA
 ========================================= */
 
-function calcularEstimativa() {
-    const tipoProjeto = obterValorSelecionado("project-type");
-    const paginas = obterValorSelecionado("pages");
-    const design = obterValorSelecionado("design");
-    const prazo = obterValorSelecionado("deadline");
+/**
+ * Calcula a estimativa de preço do projeto com base nas opções selecionadas no formulário.
+ * @returns {object} Um objeto contendo todos os detalhes do cálculo e o valor final.
+ */
+function calcularEstimativaProjeto() {
+    // Coleta os valores selecionados do formulário.
+    const tipoProjetoSelecionado = obterOpcaoSelecionada("project-type");
+    const paginasSelecionadas = obterOpcaoSelecionada("pages");
+    const designSelecionado = obterOpcaoSelecionada("design");
+    const prazoSelecionado = obterOpcaoSelecionada("deadline");
+    const funcionalidadesSelecionadas = obterFuncionalidadesMarcadas();
 
-    const funcionalidades = obterFuncionalidadesSelecionadas();
+    /* 1. Cálculo do valor base do projeto */
+    const valorBaseProjeto = precosServicos.projetos[tipoProjetoSelecionado] || 0;
 
-    /* Projeto base */
-    const valorProjeto =
-        precos.projetos[tipoProjeto] || 0;
+    /* 2. Cálculo do valor das páginas adicionais */
+    const valorAdicionalPaginas = precosServicos.paginas[paginasSelecionadas] || 0;
 
-    /* Páginas */
-    const valorPaginas =
-        precos.paginas[paginas] || 0;
+    /* 3. Cálculo do valor das funcionalidades extras */
+    const valorTotalFuncionalidades = calcularCustoFuncionalidades(funcionalidadesSelecionadas);
 
-    /* Funcionalidades */
-    const valorFuncionalidades =
-        calcularFuncionalidades(funcionalidades);
-
-    /* Design */
-    const valorDesign =
-        precos.design[design] || 0;
+    /* 4. Cálculo do valor do design (se personalizado) */
+    const valorAdicionalDesign = precosServicos.design[designSelecionado] || 0;
 
     /*
-        O adicional de prazo é calculado
-        sobre o subtotal antes do prazo.
+        5. O adicional de prazo é calculado sobre o subtotal
+        (valor base + páginas + funcionalidades + design) antes do próprio adicional de prazo.
+        Isso garante que o percentual seja aplicado sobre o custo total do trabalho.
     */
-    const subtotal =
-        valorProjeto +
-        valorPaginas +
-        valorFuncionalidades +
-        valorDesign;
+    const subtotalAntesPrazo =
+        valorBaseProjeto +
+        valorAdicionalPaginas +
+        valorTotalFuncionalidades +
+        valorAdicionalDesign;
 
-    const valorPrazo =
-        calcularPrazo(subtotal, prazo);
+    const valorAdicionalPrazo = calcularAdicionalPrazo(subtotalAntesPrazo, prazoSelecionado);
 
-    /* Valor final */
-    const valorFinal =
-        subtotal + valorPrazo;
+    /* 6. Valor final do projeto (sem manutenção) */
+    const valorEstimadoFinal = subtotalAntesPrazo + valorAdicionalPrazo;
 
-    /* Manutenção */
-    const incluirManutencao =
-        maintenanceCheckbox.checked;
+    /* 7. Verificação e cálculo da manutenção mensal */
+    const incluirManutencao = checkboxManutencao.checked;
+    const valorManutencao = incluirManutencao ? precosServicos.manutencaoMensal : 0;
 
-    const valorManutencao =
-        incluirManutencao
-            ? precos.manutencao
-            : 0;
-
+    // Retorna um objeto com todos os valores calculados para exibição e resumo.
     return {
-        tipoProjeto,
-        paginas,
-        funcionalidades,
-        design,
-        prazo,
+        tipoProjeto: tipoProjetoSelecionado,
+        paginas: paginasSelecionadas,
+        funcionalidades: funcionalidadesSelecionadas,
+        design: designSelecionado,
+        prazo: prazoSelecionado,
 
-        valorProjeto,
-        valorPaginas,
-        valorFuncionalidades,
-        valorDesign,
-        valorPrazo,
-        valorFinal,
+        valorBaseProjeto,
+        valorAdicionalPaginas,
+        valorTotalFuncionalidades,
+        valorAdicionalDesign,
+        valorAdicionalPrazo,
+        valorEstimadoFinal,
 
         incluirManutencao,
         valorManutencao
@@ -267,66 +295,63 @@ function calcularEstimativa() {
 
 
 /* =========================================
-   MOSTRAR RESULTADO
+   FUNÇÕES DE ATUALIZAÇÃO DA INTERFACE
 ========================================= */
 
-function mostrarResultado(dados) {
-    detailProject.textContent =
-        formatarMoeda(dados.valorProjeto);
+/**
+ * Atualiza a seção de resultados na interface com os dados calculados.
+ * @param {object} dadosDoCalculo - Objeto retornado por `calcularEstimativaProjeto`.
+ */
+function exibirResultadosNaInterface(dadosDoCalculo) {
+    // Atualiza os valores detalhados do orçamento.
+    detalheProjetoValor.textContent = formatarValorParaMoeda(dadosDoCalculo.valorBaseProjeto);
+    detalhePaginasValor.textContent = formatarValorParaMoeda(dadosDoCalculo.valorAdicionalPaginas);
+    detalheFuncionalidadesValor.textContent = formatarValorParaMoeda(dadosDoCalculo.valorTotalFuncionalidades);
+    detalheDesignValor.textContent = formatarValorParaMoeda(dadosDoCalculo.valorAdicionalDesign);
+    detalhePrazoValor.textContent = formatarValorParaMoeda(dadosDoCalculo.valorAdicionalPrazo);
 
-    detailPages.textContent =
-        formatarMoeda(dados.valorPaginas);
+    // Atualiza o preço final.
+    precoFinalElemento.textContent = formatarValorParaMoeda(dadosDoCalculo.valorEstimadoFinal);
 
-    detailFeatures.textContent =
-        formatarMoeda(dados.valorFuncionalidades);
-
-    detailDesign.textContent =
-        formatarMoeda(dados.valorDesign);
-
-    detailDeadline.textContent =
-        formatarMoeda(dados.valorPrazo);
-
-    finalPrice.textContent =
-        formatarMoeda(dados.valorFinal);
-
-    if (dados.incluirManutencao) {
-        resultMaintenance.textContent =
-            `${formatarMoeda(dados.valorManutencao)}/mês`;
+    // Atualiza o status da manutenção no resultado.
+    if (dadosDoCalculo.incluirManutencao) {
+        statusManutencaoResultado.textContent =
+            `${formatarValorParaMoeda(dadosDoCalculo.valorManutencao)}/mês`;
     } else {
-        resultMaintenance.textContent =
-            "Não incluída";
+        statusManutencaoResultado.textContent = "Não incluída";
     }
 
-    resultSection.hidden = false;
+    // Torna a seção de resultados visível.
+    secaoResultado.hidden = false;
 
-    resultSection.scrollIntoView({
+    // Rola a página até a seção de resultados para que o usuário a veja.
+    secaoResultado.scrollIntoView({
         behavior: "smooth",
         block: "start"
     });
 }
 
 
-/* =========================================
-   MANUTENÇÃO
-========================================= */
-
-function atualizarManutencao() {
-    if (maintenanceCheckbox.checked) {
-        maintenancePreview.hidden = false;
-
-        maintenanceValue.textContent =
-            `${formatarMoeda(precos.manutencao)}/mês`;
+/**
+ * Atualiza a pré-visualização do valor da manutenção com base no estado do checkbox.
+ */
+function atualizarPreVisualizacaoManutencao() {
+    if (checkboxManutencao.checked) {
+        preVisualizacaoManutencao.hidden = false;
+        valorManutencaoExibicao.textContent =
+            `${formatarValorParaMoeda(precosServicos.manutencaoMensal)}/mês`;
     } else {
-        maintenancePreview.hidden = true;
+        preVisualizacaoManutencao.hidden = true;
     }
 }
 
 
 /* =========================================
-   NOMES PARA O RESUMO
+   OBJETOS DE MAPEAMENTO PARA NOMES AMIGÁVEIS (RESUMO)
+   Usados para converter os valores técnicos do formulário em descrições legíveis para o resumo.
 ========================================= */
 
-const nomesProjetos = {
+const nomesAmigaveisProjetos = {
     landingPage: "Landing Page",
     institucional: "Site Institucional",
     lojaVirtual: "Loja Virtual",
@@ -334,7 +359,7 @@ const nomesProjetos = {
 };
 
 
-const nomesPaginas = {
+const nomesAmigaveisPaginas = {
     uma: "1 página",
     duasQuatro: "2 a 4 páginas",
     cincoSete: "5 a 7 páginas",
@@ -342,25 +367,25 @@ const nomesPaginas = {
 };
 
 
-const nomesFuncionalidades = {
-    formulario: "Formulário",
-    whatsapp: "WhatsApp",
+const nomesAmigaveisFuncionalidades = {
+    formulario: "Formulário de contato",
+    whatsapp: "Integração com WhatsApp",
     galeria: "Galeria de imagens",
     blog: "Blog",
-    depoimentos: "Depoimentos",
+    depoimentos: "Área de depoimentos",
     mapa: "Mapa / localização",
     animacoes: "Animações",
     seo: "SEO básico"
 };
 
 
-const nomesDesign = {
+const nomesAmigaveisDesign = {
     simples: "Simples",
     personalizado: "Personalizado"
 };
 
 
-const nomesPrazo = {
+const nomesAmigaveisPrazo = {
     normal: "Normal",
     reduzido: "Reduzido",
     urgente: "Urgente"
@@ -368,69 +393,89 @@ const nomesPrazo = {
 
 
 /* =========================================
-   CRIAR RESUMO
+   FUNÇÕES DE RESUMO E CÓPIA
 ========================================= */
 
-function criarResumo(dados) {
-    const funcionalidades =
-        dados.funcionalidades.length > 0
-            ? dados.funcionalidades
-                .map((item) => `* ${nomesFuncionalidades[item]}`)
-                .join("\n")
-            : "* Nenhuma";
+/**
+ * Cria uma string de resumo formatada com todos os detalhes do orçamento.
+ * @param {object} dadosDoCalculo - Objeto retornado por `calcularEstimativaProjeto`.
+ * @returns {string} O resumo completo do orçamento.
+ */
+function gerarResumoDoOrcamento(dadosDoCalculo) {
+    // Formata a lista de funcionalidades para o resumo.
+    const funcionalidadesFormatadas =
+        dadosDoCalculo.funcionalidades.length > 0
+            ? dadosDoCalculo.funcionalidades
+                .map((item) => `* ${nomesAmigaveisFuncionalidades[item]}`)
+                .join("\n") // Junta os itens com quebra de linha
+            : "* Nenhuma funcionalidade extra selecionada"; // Mensagem padrão se não houver funcionalidades.
 
-    const manutencao =
-        dados.incluirManutencao
-            ? `${formatarMoeda(dados.valorManutencao)}/mês`
+    // Determina o status da manutenção para o resumo.
+    const statusManutencaoResumo =
+        dadosDoCalculo.incluirManutencao
+            ? `${formatarValorParaMoeda(dadosDoCalculo.valorManutencao)}/mês`
             : "Não incluída";
 
+    // Utiliza template literals para construir o resumo de forma legível.
     return `NEXA - ESTIMATIVA DE PROJETO
 
-Projeto: ${nomesProjetos[dados.tipoProjeto]}
+Tipo de Projeto: ${nomesAmigaveisProjetos[dadosDoCalculo.tipoProjeto]}
 
-Páginas: ${nomesPaginas[dados.paginas]}
+Número de Páginas: ${nomesAmigaveisPaginas[dadosDoCalculo.paginas]}
 
-Funcionalidades:
-${funcionalidades}
+Funcionalidades Extras:
+${funcionalidadesFormatadas}
 
-Design: ${nomesDesign[dados.design]}
+Nível de Design: ${nomesAmigaveisDesign[dadosDoCalculo.design]}
 
-Prazo: ${nomesPrazo[dados.prazo]}
+Prazo de Entrega: ${nomesAmigaveisPrazo[dadosDoCalculo.prazo]}
 
-Desenvolvimento: ${formatarMoeda(dados.valorFinal)}
+----------------------------------------
+Valor Estimado do Desenvolvimento: ${formatarValorParaMoeda(dadosDoCalculo.valorEstimadoFinal)}
+Manutenção Mensal: ${statusManutencaoResumo}
+----------------------------------------
 
-Manutenção: ${manutencao}`;
+Esta é uma estimativa inicial. Para um orçamento detalhado, entre em contato.`;
 }
 
 
-/* =========================================
-   COPIAR RESUMO
-========================================= */
-
-async function copiarResumo() {
-    if (resultSection.hidden) {
+/**
+ * Copia o resumo do orçamento para a área de transferência do usuário.
+ * Fornece feedback visual sobre o sucesso ou falha da operação.
+ */
+async function copiarResumoParaAreaDeTransferencia() {
+    // Não tenta copiar se a seção de resultados estiver oculta.
+    if (secaoResultado.hidden) {
         return;
     }
 
-    const dados = calcularEstimativa();
-    const resumo = criarResumo(dados);
+    const dadosAtuais = calcularEstimativaProjeto();
+    const resumoGerado = gerarResumoDoOrcamento(dadosAtuais);
 
     try {
-        await navigator.clipboard.writeText(resumo);
+        // Utiliza a API Clipboard moderna para copiar texto.
+        await navigator.clipboard.writeText(resumoGerado);
 
-        copyFeedback.textContent =
-            "Resumo copiado para a área de transferência.";
+        feedbackCopiaMensagem.textContent =
+            "Resumo copiado para a área de transferência!";
+        // Usa a variável CSS para a cor de sucesso
+        feedbackCopiaMensagem.style.color = 'var(--color-success)';
 
+        // Limpa a mensagem de feedback após 3 segundos.
         setTimeout(() => {
-            copyFeedback.textContent = "";
+            feedbackCopiaMensagem.textContent = "";
+            feedbackCopiaMensagem.style.color = ''; // Reseta a cor
         }, 3000);
 
     } catch (erro) {
-        copyFeedback.textContent =
-            "Não foi possível copiar automaticamente.";
+        // Em caso de falha (ex: permissão negada), informa o usuário.
+        feedbackCopiaMensagem.textContent =
+            "Não foi possível copiar automaticamente. Por favor, copie manualmente.";
+        // Usa a variável CSS para a cor de erro
+        feedbackCopiaMensagem.style.color = 'var(--color-error)';
 
         console.error(
-            "Erro ao copiar resumo:",
+            "Erro ao copiar resumo para a área de transferência:",
             erro
         );
     }
@@ -438,20 +483,25 @@ async function copiarResumo() {
 
 
 /* =========================================
-   NOVA SIMULAÇÃO
+   FUNÇÃO PARA INICIAR UMA NOVA SIMULAÇÃO
 ========================================= */
 
-function novaSimulacao() {
-    form.reset();
+/**
+ * Reseta o formulário e a interface para iniciar uma nova simulação de orçamento.
+ */
+function iniciarNovaSimulacao() {
+    formularioCalculadora.reset(); // Limpa todos os campos do formulário.
 
-    resultSection.hidden = true;
+    secaoResultado.hidden = true; // Esconde a seção de resultados.
 
-    maintenancePreview.hidden = true;
+    preVisualizacaoManutencao.hidden = true; // Esconde a pré-visualização da manutenção.
 
-    limparErro();
+    limparMensagemErro(); // Limpa qualquer mensagem de erro.
 
-    copyFeedback.textContent = "";
+    feedbackCopiaMensagem.textContent = ""; // Limpa o feedback de cópia.
+    feedbackCopiaMensagem.style.color = ''; // Reseta a cor do feedback.
 
+    // Rola a página para o topo para uma nova experiência de usuário.
     window.scrollTo({
         top: 0,
         behavior: "smooth"
@@ -460,42 +510,46 @@ function novaSimulacao() {
 
 
 /* =========================================
-   EVENTOS
+   REGISTRO DE EVENTOS (EVENT LISTENERS)
+   Conecta as interações do usuário às funções JavaScript.
 ========================================= */
 
-form.addEventListener("submit", (event) => {
-    event.preventDefault();
+// Evento de submissão do formulário: calcula e exibe a estimativa.
+formularioCalculadora.addEventListener("submit", (evento) => {
+    evento.preventDefault(); // Impede o comportamento padrão de recarregar a página.
 
+    // Valida o formulário antes de prosseguir com o cálculo.
     if (!validarFormulario()) {
-        return;
+        return; // Se a validação falhar, interrompe a execução.
     }
 
-    const dados = calcularEstimativa();
-
-    mostrarResultado(dados);
+    const dadosCalculados = calcularEstimativaProjeto(); // Realiza o cálculo.
+    exibirResultadosNaInterface(dadosCalculados); // Atualiza a interface com os resultados.
 });
 
-
-maintenanceCheckbox.addEventListener(
+// Evento de mudança no checkbox de manutenção: atualiza a pré-visualização.
+checkboxManutencao.addEventListener(
     "change",
-    atualizarManutencao
+    atualizarPreVisualizacaoManutencao
 );
 
-
-copyButton.addEventListener(
+// Evento de clique no botão de copiar resumo.
+botaoCopiarResumo.addEventListener(
     "click",
-    copiarResumo
+    copiarResumoParaAreaDeTransferencia
 );
 
-
-newSimulationButton.addEventListener(
+// Evento de clique no botão de nova simulação.
+botaoNovaSimulacao.addEventListener(
     "click",
-    novaSimulacao
+    iniciarNovaSimulacao
 );
 
 
 /* =========================================
-   INICIALIZAÇÃO
+   INICIALIZAÇÃO DA APLICAÇÃO
+   Funções a serem executadas quando a página é carregada.
 ========================================= */
 
-atualizarManutencao();
+// Garante que a pré-visualização da manutenção esteja no estado correto ao carregar a página.
+atualizarPreVisualizacaoManutencao();
